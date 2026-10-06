@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import type { GroupSummary } from '@/lib/api/groups';
-import { formatBaseUnits } from '@/lib/susu/amounts';
+import { IndexedAmount } from './IndexedAmount';
 import { roundSummary } from '@/lib/susu/group-state';
 import { AddressChip, Card } from './ui';
 
@@ -59,8 +59,8 @@ export function IndexedGroupCard({ group }: { group: GroupSummary }) {
           </div>
 
           <p className="mt-2 text-sm">
-            <span className="font-mono">{formatBaseUnits(group.contributionAmount)} USDC</span> per
-            round · {group.memberCount} of {group.memberCapacity} members
+            <IndexedAmount value={group.contributionAmount} /> per round · {group.memberCount} of{' '}
+            {group.memberCapacity} members
           </p>
           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             {roundSummary(group)}

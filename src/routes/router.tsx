@@ -15,32 +15,39 @@ import { Activity } from '@/pages/app/Activity';
 import { Settings } from '@/pages/app/Settings';
 import { TransactionDetail } from '@/pages/app/TransactionDetail';
 import { NotFound } from '@/pages/NotFound';
+import { RenderErrorNotice } from '@/components/ErrorBoundary';
 
 const router = createBrowserRouter([
-  { path: '/', element: <Landing /> },
-  { path: '/login', element: <Login /> },
-  { path: '/signup', element: <Signup /> },
-  { path: '/forgot-password', element: <ForgotPassword /> },
-  { path: '/reset-password', element: <ResetPassword /> },
-  { path: '/join/:inviteCode', element: <JoinInvite /> },
+  { path: '/', element: <Landing />, errorElement: <RenderErrorNotice /> },
+  { path: '/login', element: <Login />, errorElement: <RenderErrorNotice /> },
+  { path: '/signup', element: <Signup />, errorElement: <RenderErrorNotice /> },
+  { path: '/forgot-password', element: <ForgotPassword />, errorElement: <RenderErrorNotice /> },
+  { path: '/reset-password', element: <ResetPassword />, errorElement: <RenderErrorNotice /> },
+  { path: '/join/:inviteCode', element: <JoinInvite />, errorElement: <RenderErrorNotice /> },
   {
     path: '/app',
+    errorElement: <RenderErrorNotice />,
     element: (
       <RequireAuth>
         <AppLayout />
       </RequireAuth>
     ),
     children: [
-      { index: true, element: <Dashboard /> },
-      { path: 'groups', element: <Groups /> },
-      { path: 'groups/create', element: <CreateGroup /> },
-      { path: 'groups/:id', element: <GroupDetail /> },
-      { path: 'activity', element: <Activity /> },
-      { path: 'settings', element: <Settings /> },
-      { path: 'transactions/:hash', element: <TransactionDetail /> },
+      // Catch at the leaf so the account, wallet controls and navigation survive.
+      { index: true, element: <Dashboard />, errorElement: <RenderErrorNotice /> },
+      { path: 'groups', element: <Groups />, errorElement: <RenderErrorNotice /> },
+      { path: 'groups/create', element: <CreateGroup />, errorElement: <RenderErrorNotice /> },
+      { path: 'groups/:id', element: <GroupDetail />, errorElement: <RenderErrorNotice /> },
+      { path: 'activity', element: <Activity />, errorElement: <RenderErrorNotice /> },
+      { path: 'settings', element: <Settings />, errorElement: <RenderErrorNotice /> },
+      {
+        path: 'transactions/:hash',
+        element: <TransactionDetail />,
+        errorElement: <RenderErrorNotice />,
+      },
     ],
   },
-  { path: '*', element: <NotFound /> },
+  { path: '*', element: <NotFound />, errorElement: <RenderErrorNotice /> },
 ]);
 
 export function Router() {

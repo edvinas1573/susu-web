@@ -131,9 +131,11 @@ export function parseBaseUnits(value: string): bigint {
  *
  * The companion to `parseUsdc`, going the other way: that function turns what a
  * person typed into stroops, this turns what the index reported into what a
- * person reads.
+ * person reads. Invalid indexer data stays explicitly unavailable; transaction
+ * parsing remains strict in `parseBaseUnits` and must never use this formatter.
  */
-export function formatBaseUnits(value: string): string {
+export function formatBaseUnits(value: unknown): string | undefined {
+  if (typeof value !== 'string' || !BASE_UNITS_PATTERN.test(value)) return undefined;
   return formatUsdc(parseBaseUnits(value));
 }
 

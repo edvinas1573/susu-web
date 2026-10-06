@@ -187,6 +187,19 @@ describe('parseBaseUnits', () => {
 });
 
 describe('formatBaseUnits', () => {
+  it.each(['12.5', '', 'abc', '-1', '1e7', ' 10 ', null, undefined, 10000000, {}, []])(
+    'keeps malformed indexed amounts unavailable (%j), never a fabricated zero',
+    (value) => {
+      expect(formatBaseUnits(value)).toBeUndefined();
+    },
+  );
+
+  it('preserves exact large values and distinguishes a real zero from missing data', () => {
+    expect(formatBaseUnits('9007199254740993')).toBe('900719925.4740993');
+    expect(formatBaseUnits('0')).toBe('0');
+    expect(() => parseBaseUnits('12.5')).toThrow();
+  });
+
   it('renders an API amount the way a person reads it', () => {
     // USDC has seven decimals, so ten million base units is one USDC.
     expect(formatBaseUnits('10000000')).toBe('1');

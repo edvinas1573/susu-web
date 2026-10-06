@@ -254,6 +254,12 @@ Everything under `/app` requires a session and redirects to `/login` without one
 attempted destination is preserved, so signing in returns the user to where they were
 going rather than to the overview.
 
+Render failures show a recovery notice with reload and home controls. Each route has its own
+error element so a failed app page preserves account, wallet and navigation controls. A root
+error boundary also covers provider and shell render failures. These notices never report a
+transaction outcome or repeat an operation. Invalid indexed amounts are shown as **Amount
+unavailable**, not zero; transaction amount parsing remains strict.
+
 ## Development
 
 Requires Node ≥ 22 and pnpm.

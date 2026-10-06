@@ -4,7 +4,7 @@ import { useMe, useMarkNotificationRead, useMyActivity, useNotifications } from 
 import { apiErrorMessage } from '@/lib/api/errors';
 import type { MemberActivityRecord } from '@/lib/api/me';
 import type { Notification } from '@/lib/api/notifications';
-import { formatBaseUnits } from '@/lib/susu/amounts';
+import { IndexedAmount } from '@/components/IndexedAmount';
 import { describeEvent } from '@/lib/susu/events';
 import { Stagger, StaggerItem } from '@/components/motion';
 import { AddressChip, Button, Card, Notice, Page, PageHeader, Spinner } from '@/components/ui';
@@ -157,6 +157,7 @@ function NotificationList() {
  */
 function ActivityRow({ record }: { record: MemberActivityRecord }) {
   const event = describeEvent(record.name, record.payload);
+  const carriesAmount = ['contribution', 'payout', 'fee'].includes(record.name);
 
   return (
     <StaggerItem className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm">
@@ -168,9 +169,7 @@ function ActivityRow({ record }: { record: MemberActivityRecord }) {
         )}
       </span>
       <span className="flex items-baseline gap-3">
-        {event.amount === undefined ? null : (
-          <span className="font-mono">{formatBaseUnits(event.amount)} USDC</span>
-        )}
+        {carriesAmount ? <IndexedAmount value={event.amount} /> : null}
         <span className="font-mono text-xs text-neutral-500">{record.ledger}</span>
         <Link
           to={`/app/groups/${record.contractId}`}

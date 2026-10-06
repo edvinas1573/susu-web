@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useGroupContributions, useGroupPayouts } from '@/lib/api/hooks';
 import { apiErrorMessage } from '@/lib/api/errors';
-import { formatBaseUnits } from '@/lib/susu/amounts';
+import { IndexedAmount } from './IndexedAmount';
 import { AddressChip, Button, Card, Notice, Spinner } from '@/components/ui';
 
 /**
@@ -34,7 +34,7 @@ function Row({
 }: {
   address: string;
   detail: string;
-  amount: string;
+  amount: ReactNode;
   txHash: string;
   isSelf: boolean;
 }) {
@@ -151,7 +151,7 @@ export function GroupLedger({
                 key={row.eventIdentity}
                 address={row.member}
                 detail={`round ${row.round}`}
-                amount={`${formatBaseUnits(row.amount)} USDC`}
+                amount={<IndexedAmount value={row.amount} />}
                 txHash={row.txHash}
                 isSelf={viewer !== undefined && row.member === viewer}
               />
@@ -171,7 +171,7 @@ export function GroupLedger({
                 key={row.eventIdentity}
                 address={row.recipient}
                 detail={`round ${row.round}`}
-                amount={`${formatBaseUnits(row.recipientAmount)} USDC`}
+                amount={<IndexedAmount value={row.recipientAmount} />}
                 txHash={row.txHash}
                 isSelf={viewer !== undefined && row.recipient === viewer}
               />
